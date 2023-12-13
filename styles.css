@@ -58,6 +58,18 @@ body {
     z-index: -1;
 }
 
+#thinking-indicator {
+    position: relative;
+    padding: 10px 20px;
+    font-family: 'Silkscreen', sans-serif;
+    font-size: 1.2rem;
+    color: lightcoral;
+}
+
+.box.computer {
+    color: rgb(33, 154, 187);
+}
+
 .main-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

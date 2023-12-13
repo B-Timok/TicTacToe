@@ -3,19 +3,47 @@ let boxes = document.querySelectorAll('.box');
 
 let turn = "X";
 let isGameOver = false;
+let isComputerTurn = false;
 
 // Function to add event listeners to the boxes
 boxes.forEach( box => {
     box.innerHTML = "";
     box.addEventListener("click", () => {
-        if (!isGameOver && box.innerHTML === "") {
+        if (!isGameOver && !isComputerTurn && box.innerHTML === "") {
             box.innerHTML = turn;
+            box.classList.remove("computer");
+            checkWin();
+            checkDraw();
+            changeTurn();
+            if (!isGameOver) {
+                isComputerTurn = true;
+                computerMove();
+            }
+        }
+    })
+})
+
+let thinkingIndicator = document.getElementById("thinking-indicator");
+// Function to make the computer move
+function computerMove() {
+    // Indicate that the computer is thinking
+    thinkingIndicator.innerHTML = "Thinking...";
+    isComputerTurn = true;
+    setTimeout(() => {
+        let emptyBoxes = Array.from(boxes).filter(box => box.innerHTML === "");
+        if (emptyBoxes.length > 0) {
+            let randomBox = emptyBoxes[Math.floor(Math.random() * emptyBoxes.length)];
+            randomBox.innerHTML = turn;
+            randomBox.classList.add("computer");
+            randomBox.style.color = "rgb(33, 154, 187)";
             checkWin();
             checkDraw();
             changeTurn();
         }
-    })
-})
+        thinkingIndicator.innerHTML = "";
+        isComputerTurn = false;
+    }, 1300); // 1000 milliseconds = 1 second
+}
 
 // Function to change the turn
 function changeTurn() {
@@ -79,6 +107,7 @@ document.querySelector("#play-again").addEventListener("click", () => {
     document.querySelector(".bg").style.left = "0";
     document.querySelector("#results").innerHTML = "";
     document.querySelector("#play-again").style.display = "none";
+    // document.querySelector(".box.computer").style.color = "rgb(33, 154, 187)";
 
     resetBoxStyles();
 })
@@ -89,5 +118,6 @@ function resetBoxStyles() {
         e.innerHTML = "";
         e.style.removeProperty("background-color");
         e.style.color = "black";
+        e.classList.remove("computer");
     });
 }
